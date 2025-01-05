@@ -1,0 +1,86 @@
+﻿@page "/list-debtmanagement"
+@using System.Text.Json
+@using System.IO
+<h3 class="mb-4">Debt Management List</h3>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <!-- Add Tags Button -->
+    <NavLink class="btn btn-primary" href="add-debtmanagement">
+        <span class="bi bi-plus-circle" aria-hidden="true"></span> Add Debt Management
+    </NavLink>
+</div>
+<div class="card shadow-sm">
+    <div class="card-body">
+        @if (debts == null || !debts.Any())
+        {
+            <p>No debt records found.</p>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Source</th>
+                        <th>Amount</th>
+                        <th>Due Date</th>
+                        <th>Is Cleared</th>
+                        <th>Cleared Date</th>
+                        <th>Notes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var debt in debts)
+                    {
+                        <tr class="@(debt.IsCleared ? "" : "table-danger")">
+                            <td>@debt.Id</td>
+                            <td>@debt.Source</td>
+                            <td>@debt.Amount.ToString("C")</td>
+                            <td>@debt.DueDate.ToShortDateString()</td>
+                            <td>@(debt.IsCleared ? "Yes" : "No")</td>
+                            <td>@(debt.ClearedDate.HasValue ? debt.ClearedDate.Value.ToShortDateString() : "N/A")</td>
+                            <td>@debt.Notes</td>
+                            <td>
+                                <NavLink class="btn btn-sm btn-warning" href=@($"edit-debtmanagement/{debt.Id}")>
+                                    Edit
+                                </NavLink>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+@code {
+    private List<Debt> debts = new List<Debt>();
+    private string debtFilePath = @"C:\\AD\\debt.json";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (File.Exists(debtFilePath))
+        {
+            var jsonContent = await File.ReadAllTextAsync(debtFilePath);
+            if (!string.IsNullOrWhiteSpace(jsonContent))
+            {
+                debts = JsonSerializer.Deserialize<List<Debt>>(jsonContent);
+            }
+        }
+    }
+
+    // Define the Debt class
+    public class Debt
+    {
+        public int Id { get; set; }
+        public string Source { get; set; }
+        public decimal Amount { get; set; }
+        public bool IsCleared { get; set; }
+        public DateTime? ClearedDate { get; set; }
+        public string Notes { get; set; }
+        public DateTime DueDate { get; set; }
+    }
+
+
+
+}

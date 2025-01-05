@@ -1,0 +1,99 @@
+﻿@page "/listcashoutflow"
+@using System.Text.Json
+@using System.IO
+
+<h3 class="mb-4">List Cash Out Flow</h3>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <NavLink class="btn btn-primary" href="/addcashoutflow">
+        <span class="bi bi-plus-circle" aria-hidden="true"></span> Add Cash Out Flow
+    </NavLink>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h5 class="card-title mb-0">Cash Out Flow List</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Source</th>
+                    <th>Notes</th>
+                    <th>Tags</th>
+                    <th>Transaction Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (cashInflows != null && cashInflows.Any())
+                {
+                    @foreach (var inflow in cashInflows)
+                    {
+                        <tr>
+                            <td>@inflow.Id</td>
+                            <td>@inflow.Amount.ToString("C")</td>
+                            <td>@inflow.Date.ToShortDateString()</td>
+                            <td>@inflow.Source</td>
+                            <td>@inflow.Notes</td>
+                            <td>@string.Join(", ", inflow.Tags)</td>
+                            <td>@inflow.TransactionType</td>
+                            <td>
+                                <NavLink class="btn btn-sm btn-warning" href=@($"editcashoutflow/{inflow.Id}")>
+                                    Edit
+                                </NavLink>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="text-center">No cash inflow records found.</td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+@code {
+    private List<CashInflow> cashInflows = new List<CashInflow>();
+    private string cashInflowFilePath = @"C:\AD\cashoutflow.json";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCashInflows();
+    }
+
+    private async Task LoadCashInflows()
+    {
+        try
+        {
+            if (File.Exists(cashInflowFilePath))
+            {
+                var jsonContent = await File.ReadAllTextAsync(cashInflowFilePath);
+                cashInflows = JsonSerializer.Deserialize<List<CashInflow>>(jsonContent) ?? new List<CashInflow>();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading cash inflows: {ex.Message}");
+        }
+    }
+
+    public class CashInflow
+    {
+        public int Id { get; set; }
+        public decimal Amount { get; set; }
+        public DateTime Date { get; set; }
+        public string Source { get; set; }
+        public string Notes { get; set; }
+        public List<string> Tags { get; set; } = new List<string>();
+        public string TransactionType { get; set; } = "Credit";
+    }
+}

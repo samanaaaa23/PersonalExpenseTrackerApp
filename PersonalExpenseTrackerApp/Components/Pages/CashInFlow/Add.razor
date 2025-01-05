@@ -1,0 +1,168 @@
+﻿@page "/addcashinflow"
+@using System.Text.Json
+@using System.IO
+@using PersonalExpenseTrackerApp.Data
+<h3 class="mb-4">Add Cash Inflow</h3>
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h5 class="card-title mb-0">Cash Inflow</h5>
+    </div>
+    <div class="card-body">
+        <EditForm Model="@transaction" OnValidSubmit="HandleValidSubmit">
+
+            <div class="mb-3">
+                <label for="amount" class="form-label">Amount</label>
+                <InputNumber id="amount" class="form-control" @bind-Value="transaction.Amount" />
+            </div>
+
+            <div class="mb-3">
+                <label for="date" class="form-label">Date</label>
+                <InputDate id="date" class="form-control" @bind-Value="transaction.Date" />
+            </div>
+
+            <div class="mb-3">
+                <label for="source" class="form-label">Source</label>
+                <InputText id="source" class="form-control" @bind-Value="transaction.Source" />
+            </div>
+
+            <div class="mb-3">
+                <label for="notes" class="form-label">Notes</label>
+                <InputText id="notes" class="form-control" @bind-Value="transaction.Notes" />
+            </div>
+
+            <div class="mb-3">
+                <label for="tags" class="form-label">Tags</label>
+                <select id="tags" class="form-select" multiple @onchange="HandleTagSelection">
+                    @foreach (var tag in tags)
+                    {
+                        <option value="@tag.Title">@tag.Title</option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="transactionType" class="form-label">Transaction Type</label>
+                <InputText id="transactionType" class="form-control" @bind-Value="transaction.TransactionType" disabled />
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">Save Transaction</button>
+            </div>
+
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private CashOverflow transaction = new CashOverflow();
+    private List<Tag> tags = new List<Tag>();
+    private string cashInflowFilePath = @"C:\AD\cashinflow.json";
+    private string allTransactionsFilePath = @"C:\AD\alltransactions.json";
+
+    protected override async Task OnInitializedAsync()
+    {
+        string tagsFilePath = @"C:\AD\tags.json";
+        if (File.Exists(tagsFilePath))
+        {
+            var jsonContent = await File.ReadAllTextAsync(tagsFilePath);
+            tags = JsonSerializer.Deserialize<List<Tag>>(jsonContent);
+        }
+
+        transaction.Date = DateTime.Today;
+    }
+
+    private void HandleTagSelection(ChangeEventArgs e)
+    {
+        var selectedValues = e.Value as IEnumerable<string>;
+        if (selectedValues != null)
+        {
+            transaction.Tags = selectedValues.ToList();
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        List<CashOverflow> cashInflows = new List<CashOverflow>();
+
+        if (File.Exists(cashInflowFilePath))
+        {
+            var existingContent = await File.ReadAllTextAsync(cashInflowFilePath);
+            if (!string.IsNullOrWhiteSpace(existingContent))
+            {
+                cashInflows = JsonSerializer.Deserialize<List<CashOverflow>>(existingContent);
+            }
+        }
+
+        int nextId = cashInflows.Any() ? cashInflows.Max(c => c.Id) + 1 : 1;
+        transaction.Id = nextId;
+
+        cashInflows.Add(transaction);
+
+        var jsonContent = JsonSerializer.Serialize(cashInflows, new JsonSerializerOptions { WriteIndented = true });
+        await File.WriteAllTextAsync(cashInflowFilePath, jsonContent);
+
+        Console.WriteLine($"Transaction with Id {transaction.Id} saved!");
+
+        var allTransaction = new AllTransaction
+            {
+                Id = nextId,
+                Amount = transaction.Amount,
+                Date = transaction.Date,
+                Notes = transaction.Notes,
+                Tags = transaction.Tags, // Saving tags directly
+                TagsId = tags.Where(tag => transaction.Tags.Contains(tag.Title)).Select(tag => tag.Id).ToList(),
+                IsCashInFlow = transaction.Id,
+                IsCashOutFlow = false,
+                IsDebt = false
+            };
+
+        List<AllTransaction> allTransactions = new List<AllTransaction>();
+
+        if (File.Exists(allTransactionsFilePath))
+        {
+            var existingAllTransactions = await File.ReadAllTextAsync(allTransactionsFilePath);
+            if (!string.IsNullOrWhiteSpace(existingAllTransactions))
+            {
+                allTransactions = JsonSerializer.Deserialize<List<AllTransaction>>(existingAllTransactions);
+            }
+        }
+
+        allTransactions.Add(allTransaction);
+
+        var allTransactionsJsonContent = JsonSerializer.Serialize(allTransactions, new JsonSerializerOptions { WriteIndented = true });
+        await File.WriteAllTextAsync(allTransactionsFilePath, allTransactionsJsonContent);
+
+        transaction = new CashOverflow();
+    }
+
+    public class CashOverflow
+    {
+        public int Id { get; set; }
+        public decimal Amount { get; set; }
+        public DateTime Date { get; set; }
+        public string Source { get; set; }
+        public string Notes { get; set; }
+        public List<string> Tags { get; set; } = new List<string>();
+        public string TransactionType { get; set; } = "Credit";
+    }
+
+    public class Tag
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+    }
+
+    public class AllTransaction
+    {
+        public int Id { get; set; }
+        public decimal Amount { get; set; }
+        public DateTime Date { get; set; }
+        public string Notes { get; set; }
+        public List<string> Tags { get; set; } = new List<string>(); // Tags saved directly
+        public List<int> TagsId { get; set; } = new List<int>();
+        public int IsCashInFlow { get; set; }
+        public bool IsCashOutFlow { get; set; }
+        public bool IsDebt { get; set; }
+    }
+}

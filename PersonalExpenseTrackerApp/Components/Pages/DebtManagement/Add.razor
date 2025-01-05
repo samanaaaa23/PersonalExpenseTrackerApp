@@ -1,0 +1,104 @@
+﻿@page "/add-debtmanagement"
+@using System.Text.Json
+@using System.IO
+@using PersonalExpenseTrackerApp.Data
+
+<h3 class="mb-4">Debt Management</h3>
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h5 class="card-title mb-0">Add Debt</h5>
+    </div>
+    <div class="card-body">
+        <EditForm Model="@debt" OnValidSubmit="HandleValidSubmit">
+
+            <div class="mb-3">
+                <label for="source" class="form-label">Source</label>
+                <InputText id="source" class="form-control" @bind-Value="debt.Source" />
+            </div>
+
+            <div class="mb-3">
+                <label for="amount" class="form-label">Amount</label>
+                <InputNumber id="amount" class="form-control" @bind-Value="debt.Amount" />
+            </div>
+
+            <div class="mb-3">
+                <label for="dueDate" class="form-label">Due Date</label>
+                <InputDate id="dueDate" class="form-control" @bind-Value="debt.DueDate" />
+            </div>
+
+            <div class="mb-3">
+                <label for="isCleared" class="form-label">Is Cleared</label>
+                <InputCheckbox id="isCleared" class="form-check-input" @bind-Value="debt.IsCleared" />
+            </div>
+
+            <div class="mb-3" style="display: @(debt.IsCleared ? "block" : "none")">
+                <label for="clearedDate" class="form-label">Cleared Date</label>
+                <InputDate id="clearedDate" class="form-control" @bind-Value="debt.ClearedDate" />
+            </div>
+
+            <div class="mb-3">
+                <label for="notes" class="form-label">Notes</label>
+                <InputText id="notes" class="form-control" @bind-Value="debt.Notes" />
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">Save Debt</button>
+            </div>
+
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private Debt debt = new Debt();
+    private string debtFilePath = @"C:\AD\debt.json";
+
+    protected override void OnInitialized()
+    {
+        debt.DueDate = DateTime.Today;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        List<Debt> debts = new List<Debt>();
+
+        // Load existing debts if the file exists
+        if (File.Exists(debtFilePath))
+        {
+            var existingContent = await File.ReadAllTextAsync(debtFilePath);
+            if (!string.IsNullOrWhiteSpace(existingContent))
+            {
+                debts = JsonSerializer.Deserialize<List<Debt>>(existingContent);
+            }
+        }
+
+        // Assign an auto-incremented Id
+        int nextId = debts.Any() ? debts.Max(d => d.Id) + 1 : 1;
+        debt.Id = nextId;
+
+        // Add the new debt
+        debts.Add(debt);
+
+        // Save back to the file
+        var jsonContent = JsonSerializer.Serialize(debts, new JsonSerializerOptions { WriteIndented = true });
+        await File.WriteAllTextAsync(debtFilePath, jsonContent);
+
+        Console.WriteLine($"Debt with Id {debt.Id} saved!");
+
+        // Reset the form after saving
+        debt = new Debt();
+    }
+
+    // Define the Debt class
+    public class Debt
+    {
+        public int Id { get; set; }
+        public string Source { get; set; }
+        public decimal Amount { get; set; }
+        public bool IsCleared { get; set; }
+        public DateTime? ClearedDate { get; set; }
+        public string Notes { get; set; }
+        public DateTime DueDate { get; set; }
+    }
+}

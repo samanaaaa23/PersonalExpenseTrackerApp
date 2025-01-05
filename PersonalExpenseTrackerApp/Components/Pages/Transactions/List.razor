@@ -1,0 +1,98 @@
+﻿@page "/listtransaction"
+@using System.Text.Json
+@using System.IO
+
+
+<h3>List of Transactions</h3>
+
+@if (transactions.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Amount</th>
+                <th>Transaction Type</th>
+                <th>Date</th>
+                <th>Source</th>
+                <th>Notes</th>
+                <th>Tags</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var transaction in transactions)
+            {
+                <tr>
+                    <td>@transaction.Id</td>
+                    <td>@transaction.Amount.ToString("C")</td>
+                    <td>@transaction.TransactionType</td>
+                    <td>@transaction.Date.ToString("yyyy-MM-dd")</td>
+                    <td>@transaction.Source</td>
+                    <td>@transaction.Notes</td>
+                    <td>
+                        @if (transaction.Tags.Any())
+                        {
+                            <ul>
+                                @foreach (var tag in transaction.Tags)
+                                {
+                                    <li>@tag</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span>No tags</span>
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" @onclick="() => DeleteTransaction(transaction.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No transactions found.</p>
+}
+@code {
+    private List<Transaction> transactions = new List<Transaction>();
+    private string transactionsFilePath = @"D:\AD\transactions.json"; // Path to your transactions file
+
+    // Load the transactions from the JSON file on component initialization
+    protected override async Task OnInitializedAsync()
+    {
+        if (File.Exists(transactionsFilePath))
+        {
+            var jsonContent = await File.ReadAllTextAsync(transactionsFilePath);
+            if (!string.IsNullOrWhiteSpace(jsonContent))
+            {
+                transactions = JsonSerializer.Deserialize<List<Transaction>>(jsonContent);
+            }
+        }
+    }
+
+    // Delete transaction by ID
+    private async Task DeleteTransaction(int transactionId)
+    {
+        transactions = transactions.Where(t => t.Id != transactionId).ToList();
+
+        // Save the updated list back to the JSON file
+        var jsonContent = JsonSerializer.Serialize(transactions, new JsonSerializerOptions { WriteIndented = true });
+        await File.WriteAllTextAsync(transactionsFilePath, jsonContent);
+    }
+
+    // Define the Transaction class
+    public class Transaction
+    {
+        public int Id { get; set; }
+        public decimal Amount { get; set; }
+        public DateTime Date { get; set; }
+        public string Source { get; set; }
+        public string Notes { get; set; }
+        public List<string> Tags { get; set; } = new List<string>();
+        public string TransactionType { get; set; }
+    }
+}

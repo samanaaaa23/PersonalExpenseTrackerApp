@@ -1,0 +1,267 @@
+﻿@page "/dashboard"
+@using System.Text.Json
+@using System.IO
+
+<h1 class="mb-4">Dashboard</h1>
+
+<div class="container">
+
+    <!-- Overview Stats Section -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Total Cash Inflows</div>
+                <div class="card-body">
+                    @totalCashInflowsCount
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Total Cash Outflows</div>
+                <div class="card-body">
+                    @totalCashOutflowsCount
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-header">Total Debts</div>
+                <div class="card-body">
+                    @totalDebtsCount
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Number of Transactions Section -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-header">Total Transactions</div>
+                <div class="card-body">
+                    @totalTransactionsCount
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-secondary mb-3">
+                <div class="card-header">Total Transaction Amount</div>
+                <div class="card-body">
+                    @totalTransactionsAmount.ToString("C")
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Remaining and Cleared Debts Section -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-header">Remaining Debts</div>
+                <div class="card-body">
+                    @remainingDebtsCount
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Cleared Debts</div>
+                <div class="card-body">
+                    @clearedDebtsCount
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Highest and Lowest Transactions Table -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-header">Highest and Lowest Transactions</div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Highest Amount</th>
+                                <th>Highest Source</th>
+                                <th>Highest Date</th>
+                                <th>Lowest Amount</th>
+                                <th>Lowest Source</th>
+                                <th>Lowest Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Cash Inflow</td>
+                                <td>@highestCashInflow?.Amount.ToString("C")</td>
+                                <td>@highestCashInflow?.Source</td>
+                                <td>@highestCashInflow?.Date.ToShortDateString()</td>
+                                <td>@lowestCashInflow?.Amount.ToString("C")</td>
+                                <td>@lowestCashInflow?.Source</td>
+                                <td>@lowestCashInflow?.Date.ToShortDateString()</td>
+                            </tr>
+                            <tr>
+                                <td>Cash Outflow</td>
+                                <td>@highestCashOutflow?.Amount.ToString("C")</td>
+                                <td>@highestCashOutflow?.Source</td>
+                                <td>@highestCashOutflow?.Date.ToShortDateString()</td>
+                                <td>@lowestCashOutflow?.Amount.ToString("C")</td>
+                                <td>@lowestCashOutflow?.Source</td>
+                                <td>@lowestCashOutflow?.Date.ToShortDateString()</td>
+                            </tr>
+                            <tr>
+                                <td>Debt</td>
+                                <td>@highestDebt?.Amount.ToString("C")</td>
+                                <td>@highestDebt?.Source</td>
+                                <td>@highestDebt?.DueDate.ToShortDateString()</td>
+                                <td>@lowestDebt?.Amount.ToString("C")</td>
+                                <td>@lowestDebt?.Source</td>
+                                <td>@lowestDebt?.DueDate.ToShortDateString()</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Debts Section -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-header">Pending Debts</div>
+                <div class="card-body">
+                    @if (pendingDebts == null || !pendingDebts.Any())
+                    {
+                        <p>No pending debts.</p>
+                    }
+                    else
+                    {
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Source</th>
+                                    <th>Amount</th>
+                                    <th>Due Date</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var debt in pendingDebts)
+                                {
+                                    <tr>
+                                        <td>@debt.Id</td>
+                                        <td>@debt.Source</td>
+                                        <td>@debt.Amount.ToString("C")</td>
+                                        <td>@debt.DueDate.ToShortDateString()</td>
+                                        <td>@debt.Notes</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@code {
+    private List<Debt> debts = new List<Debt>();
+    private List<CashInflow> cashInflows = new List<CashInflow>();
+    private List<CashOutflow> cashOutflows = new List<CashOutflow>();
+
+    private string debtFilePath = @"C:\\AD\\debt.json";
+    private string cashInflowFilePath = @"C:\\AD\\cashinflow.json";
+    private string cashOutflowFilePath = @"C:\\AD\\cashoutflow.json";
+
+    // Calculating total values for display
+    private int totalCashInflowsCount => cashInflows.Count;
+    private int totalCashOutflowsCount => cashOutflows.Count;
+    private int totalDebtsCount => debts.Count;
+    private int remainingDebtsCount => pendingDebts.Count;
+    private int clearedDebtsCount => debts.Count - remainingDebtsCount;
+
+    // Total Transactions and Amount
+    private int totalTransactionsCount => totalCashInflowsCount + totalDebtsCount - totalCashOutflowsCount;
+    private decimal totalTransactionsAmount => cashInflows.Sum(c => c.Amount) + debts.Sum(d => d.Amount) - cashOutflows.Sum(c => c.Amount);
+
+    // Only get the pending debts
+    private List<Debt> pendingDebts => debts.Where(d => !d.IsCleared).ToList();
+
+    // Highest and Lowest Transactions
+    private CashInflow highestCashInflow => cashInflows.OrderByDescending(c => c.Amount).FirstOrDefault();
+    private CashInflow lowestCashInflow => cashInflows.OrderBy(c => c.Amount).FirstOrDefault();
+
+    private CashOutflow highestCashOutflow => cashOutflows.OrderByDescending(c => c.Amount).FirstOrDefault();
+    private CashOutflow lowestCashOutflow => cashOutflows.OrderBy(c => c.Amount).FirstOrDefault();
+
+    private Debt highestDebt => debts.OrderByDescending(d => d.Amount).FirstOrDefault();
+    private Debt lowestDebt => debts.OrderBy(d => d.Amount).FirstOrDefault();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (File.Exists(debtFilePath))
+        {
+            var debtJsonContent = await File.ReadAllTextAsync(debtFilePath);
+            if (!string.IsNullOrWhiteSpace(debtJsonContent))
+            {
+                debts = JsonSerializer.Deserialize<List<Debt>>(debtJsonContent);
+            }
+        }
+
+        if (File.Exists(cashInflowFilePath))
+        {
+            var cashInflowJsonContent = await File.ReadAllTextAsync(cashInflowFilePath);
+            if (!string.IsNullOrWhiteSpace(cashInflowJsonContent))
+            {
+                cashInflows = JsonSerializer.Deserialize<List<CashInflow>>(cashInflowJsonContent);
+            }
+        }
+
+        if (File.Exists(cashOutflowFilePath))
+        {
+            var cashOutflowJsonContent = await File.ReadAllTextAsync(cashOutflowFilePath);
+            if (!string.IsNullOrWhiteSpace(cashOutflowJsonContent))
+            {
+                cashOutflows = JsonSerializer.Deserialize<List<CashOutflow>>(cashOutflowJsonContent);
+            }
+        }
+    }
+
+    // Define the Debt class
+    public class Debt
+    {
+        public int Id { get; set; }
+        public string Source { get; set; }
+        public decimal Amount { get; set; }
+        public bool IsCleared { get; set; }
+        public DateTime? ClearedDate { get; set; }
+        public string Notes { get; set; }
+        public DateTime DueDate { get; set; }
+    }
+
+    // Define the CashInflow class
+    public class CashInflow
+    {
+        public int Id { get; set; }
+        public decimal Amount { get; set; }
+        public DateTime Date { get; set; }
+        public string Source { get; set; }
+        public string Notes { get; set; }
+    }
+
+    // Define the CashOutflow class
+    public class CashOutflow
+    {
+        public int Id { get; set; }
+        public decimal Amount { get; set; }
+        public DateTime Date { get; set; }
+        public string Source { get; set; }
+        public string Notes { get; set; }
+    }
+}

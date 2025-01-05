@@ -1,0 +1,70 @@
+﻿@page "/addtags"
+@using System.Text.Json
+@using System.IO
+@using PersonalExpenseTrackerApp.Data
+
+<h3 class="mb-4">Add Tag</h3>
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h5 class="card-title mb-0">New Tag</h5>
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <label for="tagTitle" class="form-label">Tag Title</label>
+            <input type="text" class="form-control" id="tagTitle" @bind="newTag.Title" placeholder="Enter tag title" />
+        </div>
+        <button class="btn btn-success" @onclick="AddTag">
+            <span class="bi bi-plus-circle"></span> Add Tag
+        </button>
+    </div>
+</div>
+
+@code {
+    private Tags newTag = new Tags();
+    private List<Tags> tagsList = new List<Tags>();
+    private string filePath = @"C:\AD\tags.json";
+
+    // Load existing tags when the component is initialized
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTags();
+    }
+
+    private async Task LoadTags()
+    {
+        if (File.Exists(filePath))
+        {
+            string jsonData = await File.ReadAllTextAsync(filePath);
+            tagsList = JsonSerializer.Deserialize<List<Tags>>(jsonData) ?? new List<Tags>();
+        }
+    }
+
+    private async Task AddTag()
+    {
+        if (!string.IsNullOrWhiteSpace(newTag.Title))
+        {
+            // Assign a new unique ID
+            newTag.Id = tagsList.Any() ? tagsList.Max(t => t.Id) + 1 : 1;
+
+            // Add the new tag to the list
+            tagsList.Add(newTag);
+
+            // Serialize and save the updated list to the file
+            string jsonData = JsonSerializer.Serialize(tagsList, new JsonSerializerOptions { WriteIndented = true });
+            await File.WriteAllTextAsync(filePath, jsonData);
+
+            // Clear the input field
+            newTag = new Tags();
+
+            // Optional: Show a success message or redirect to the list page
+        }
+    }
+
+    // Tag class definition
+    public class Tags
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+    }
+}

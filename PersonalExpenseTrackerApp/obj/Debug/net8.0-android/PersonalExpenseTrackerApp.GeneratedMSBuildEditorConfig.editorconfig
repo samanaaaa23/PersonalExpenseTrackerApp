@@ -1,0 +1,170 @@
+is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = true
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
+build_property.TargetFramework = net8.0-android
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = PersonalExpenseTrackerApp
+build_property.RootNamespace = PersonalExpenseTrackerApp
+build_property.ProjectDir = C:\Users\hp\OneDrive\Desktop\PersonalExpenseTrackerApp\PersonalExpenseTrackerApp\PersonalExpenseTrackerApp\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\hp\OneDrive\Desktop\PersonalExpenseTrackerApp\PersonalExpenseTrackerApp\PersonalExpenseTrackerApp
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/App.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = PersonalExpenseTrackerApp.App.xaml
+build_metadata.AdditionalFiles.TargetPath = App.xaml
+build_metadata.AdditionalFiles.RelativePath = App.xaml
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/MainPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = PersonalExpenseTrackerApp.MainPage.xaml
+build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
+build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Pages/CashInFlow/Add.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDYXNoSW5GbG93XEFkZC5yYXpvcg==
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Pages/CashInFlow/List.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDYXNoSW5GbG93XExpc3QucmF6b3I=
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Pages/CashOutFlow/Add.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDYXNoT3V0Rmxvd1xBZGQucmF6b3I=
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Pages/CashOutFlow/Edit.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDYXNoT3V0Rmxvd1xFZGl0LnJhem9y
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Pages/CashOutFlow/List.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDYXNoT3V0Rmxvd1xMaXN0LnJhem9y
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Pages/Dashboard.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xEYXNoYm9hcmQucmF6b3I=
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Pages/DebtManagement/Add.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xEZWJ0TWFuYWdlbWVudFxBZGQucmF6b3I=
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Pages/DebtManagement/Edit.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xEZWJ0TWFuYWdlbWVudFxFZGl0LnJhem9y
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Pages/DebtManagement/List.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xEZWJ0TWFuYWdlbWVudFxMaXN0LnJhem9y
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Pages/Error.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Pages/Home.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Pages/Tags/Add.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xUYWdzXEFkZC5yYXpvcg==
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Pages/Tags/Edit.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xUYWdzXEVkaXQucmF6b3I=
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Pages/Tags/List.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xUYWdzXExpc3QucmF6b3I=
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Pages/Transactions/List.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xUcmFuc2FjdGlvbnNcTGlzdC5yYXpvcg==
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Routes.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/_Imports.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xfSW1wb3J0cy5yYXpvcg==
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Layout/MainLayout.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTWFpbkxheW91dC5yYXpvcg==
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = b-caszi0p5ry
+
+[C:/Users/hp/OneDrive/Desktop/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/PersonalExpenseTrackerApp/Components/Layout/NavMenu.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = b-gpbjz302d3

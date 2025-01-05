@@ -1,0 +1,95 @@
+﻿@page "/listtags"
+@using PersonalExpenseTrackerApp.Data
+@using System.Text.Json
+@using System.IO
+
+<h3 class="mb-4">List Tags</h3>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <!-- Add Tags Button -->
+    <NavLink class="btn btn-primary" href="addtags">
+        <span class="bi bi-plus-circle" aria-hidden="true"></span> Add Tags
+    </NavLink>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h5 class="card-title mb-0">Tags List</h5>
+    </div>
+    <div class="card-body">
+        <!-- Tags Table -->
+        <table class="table table-bordered table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (tagsList != null && tagsList.Any())
+                {
+                    @foreach (var tag in tagsList)
+                    {
+                        <tr>
+                            <td>@tag.Id</td> <!-- Use Id as index -->
+                            <td>@tag.Title</td>
+                            <td>
+                                <NavLink class="btn btn-warning btn-sm" href="@($"edit-tag/{tag.Id}")">
+                                    <span class="bi bi-pencil-square"></span> Edit
+                                </NavLink>
+                                <button class="btn btn-danger btn-sm ms-2" @onclick="() => DeleteTag(tag.Id)">
+                                    <span class="bi bi-trash"></span> Delete
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="text-center">No tags available.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    private List<Tags> tagsList = new List<Tags>();
+    private string filePath = @"C:\AD\tags.json";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTags();
+    }
+
+    private async Task LoadTags()
+    {
+        if (File.Exists(filePath))
+        {
+            string jsonData = await File.ReadAllTextAsync(filePath);
+            tagsList = JsonSerializer.Deserialize<List<Tags>>(jsonData) ?? new List<Tags>();
+        }
+    }
+
+    private async Task DeleteTag(int id)
+    {
+        var tagToDelete = tagsList.FirstOrDefault(tag => tag.Id == id);
+        if (tagToDelete != null)
+        {
+            tagsList.Remove(tagToDelete);
+            string jsonData = JsonSerializer.Serialize(tagsList, new JsonSerializerOptions { WriteIndented = true });
+            await File.WriteAllTextAsync(filePath, jsonData);
+            await LoadTags(); // Refresh the list after deletion
+        }
+    }
+
+    // Tag class
+    public class Tags
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+    }
+}

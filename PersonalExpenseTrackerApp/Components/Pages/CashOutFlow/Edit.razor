@@ -1,0 +1,125 @@
+﻿@page "/editcashoutflow/{Id:int}"
+@using System.Text.Json
+@using System.IO
+
+<h3 class="mb-4">Edit Cash Out Flow</h3>
+
+@if (cashInflow != null)
+{
+    <EditForm Model="cashInflow" OnValidSubmit="HandleValidSubmit">
+        <div class="mb-3">
+            <label class="form-label">Amount</label>
+            <InputNumber class="form-control" @bind-Value="cashInflow.Amount" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Date</label>
+            <InputDate class="form-control" @bind-Value="cashInflow.Date" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Source</label>
+            <InputText class="form-control" @bind-Value="cashInflow.Source" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Notes</label>
+            <InputTextArea class="form-control" @bind-Value="cashInflow.Notes" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Tags</label>
+            <InputSelect id="tags" class="form-select" multiple @bind-Value="cashInflow.Tags">
+                @foreach (var tag in tags)
+                {
+                    <option value="@tag.Title">@tag.Title</option>
+                }
+            </InputSelect>
+        </div>
+
+
+        <div class="mb-3">
+            <label class="form-label">Transaction Type</label>
+            <InputText class="form-control" @bind-Value="cashInflow.TransactionType" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <NavLink class="btn btn-secondary ms-2" href="/listcashoutflow">Cancel</NavLink>
+    </EditForm>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private CashInflow cashInflow = new CashInflow();
+    private List<Tag> tags = new List<Tag>();  // List of tags loaded from file
+    private string cashInflowFilePath = @"C:\AD\cashoutflow.json";
+    private List<CashInflow> cashInflows = new List<CashInflow>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCashInflows();
+
+        // Load tags from the tags.json file
+        string tagsFilePath = @"D:\AD\tags.json";
+        if (File.Exists(tagsFilePath))
+        {
+            var jsonContent = await File.ReadAllTextAsync(tagsFilePath);
+            tags = JsonSerializer.Deserialize<List<Tag>>(jsonContent);
+        }
+
+        cashInflow = cashInflows.FirstOrDefault(c => c.Id == Id);
+
+        if (cashInflow != null)
+        {
+            // If a cash flow is found, load its tags
+            // Tags are automatically handled by the select dropdown binding
+        }
+    }
+
+    private async Task LoadCashInflows()
+    {
+        if (File.Exists(cashInflowFilePath))
+        {
+            var jsonContent = await File.ReadAllTextAsync(cashInflowFilePath);
+            cashInflows = JsonSerializer.Deserialize<List<CashInflow>>(jsonContent) ?? new List<CashInflow>();
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        // Save the changes to the cash inflow
+        var index = cashInflows.FindIndex(c => c.Id == Id);
+        if (index != -1)
+        {
+            cashInflows[index] = cashInflow;
+            await File.WriteAllTextAsync(cashInflowFilePath, JsonSerializer.Serialize(cashInflows, new JsonSerializerOptions { WriteIndented = true }));
+        }
+
+        // Redirect back to the list page
+        NavigationManager.NavigateTo("/listcashoutflow");
+    }
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+
+    public class CashInflow
+    {
+        public int Id { get; set; }
+        public decimal Amount { get; set; }
+        public DateTime Date { get; set; }
+        public string Source { get; set; }
+        public string Notes { get; set; }
+        public List<string> Tags { get; set; } = new List<string>();
+        public string TransactionType { get; set; } = "Credit";
+    }
+
+    public class Tag
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+    }
+}
